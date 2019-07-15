@@ -44,7 +44,7 @@ int main(int argc, char **argv)
 		printf("Client connected to server\n");
 		char buff[MAX];
 		strcpy(buff, (const char *) argv[1]);
-		rc = send(s, buff, strlen(buff), 0);
+		rc = send(s, buff, sizeof(buff), 0);
 		check_it(rc, __LINE__);
 		strcpy(buff, "");
 		rc = recv(s, buff, sizeof(buff), 0);
@@ -52,17 +52,18 @@ int main(int argc, char **argv)
 		if(strcmp(buff,"File found") == 0)
 		{
 			//file found
-			strcpy(buff, (const char *) argv[1]);
+			printf("File found\n");
+			char ch;
 			while(1)
 			{
-				printf("File found\n");
-				rc = recv(s, buff, sizeof(buff), 0);
+				rc = recv(s, &ch, 1, 0);
 				check_it(rc, __LINE__);
-				printf("%s", buff);
-				if(strcmp(buff,"End Of File") == 0)
-					printf("YYYYYYYYYYYYYY\n");
-					break;
-				printf("%s", buff);
+				if(ch == EOF)
+					{
+						printf("\nEnd of file!\n");
+						break;
+					}
+				printf("%c", ch);
 			}
 		}
 
