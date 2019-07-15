@@ -30,8 +30,11 @@ int main(int argc, char **argv)
 		sscanf(argv[1], "%d", &port);
 		struct sockaddr_in sockaddr, client_sockaddress;
 		int s, c, rc;
+
 		s = socket(AF_INET, SOCK_STREAM, 0); //create socket: Internet domain, stream socket type (TCP)
 		check_it(s, __LINE__);
+		int on = 1;
+		int options_status = setsockopt(s, SOL_SOCKET, SO_REUSEADDR, &on, sizeof(on));
 
 		//create internet socket address
 		sockaddr.sin_family = AF_INET;
