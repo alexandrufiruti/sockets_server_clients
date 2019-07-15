@@ -67,7 +67,7 @@ int main(int argc, char **argv)
 		else
 		{
 			fseek(fr, 0, SEEK_SET);
-			rc = send(c, "File found", sizeof("File not found"), 0);
+			rc = send(c, "File found", sizeof("File found"), 0);
 			check_it(rc, __LINE__);
 			char ch;
 			//read and send file char by char
