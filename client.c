@@ -25,6 +25,8 @@ int main(int argc, char **argv)
 {
 	if(argc==2)
 	{
+		//FILE *fp = fopen("~/Desktop/saved_file.txt", "w+");
+
 		struct sockaddr_in sockaddr;
 		int s, rc;
 		s = socket(AF_INET, SOCK_STREAM, 0); //create socket: Internet domain, stream socket type (TCP)
@@ -64,11 +66,12 @@ int main(int argc, char **argv)
 						break;
 					}
 				printf("%c", ch);
+				//fputc(ch, fp);
 			}
 		}
 
 		close(s);
-
+		//fclose(fp);
 		return 0;
 	}
 	printf("No desired file given!\n");
