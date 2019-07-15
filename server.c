@@ -6,6 +6,9 @@
 #include <netdb.h>
 #include <errno.h>
 #include <unistd.h>
+#include <sys/ioctl.h>
+#include <sys/poll.h>
+#include <sys/fcntl.h>
 
 #define PORT 8000
 #define MAX 80
@@ -58,22 +61,24 @@ int main(int argc, char **argv)
 		FILE *fr = fopen(buff, "r");
 		if(fr == NULL)
 		{
-			rc = send(c, "File not found", strlen("File not found"), 0);
+			rc = send(c, "File not found", sizeof("File not found"), 0);
 			check_it(rc, __LINE__);
 		}
 		else
 		{
 			fseek(fr, 0, SEEK_SET);
-			rc = send(c, "File found", strlen("File not found"), 0);
+			rc = send(c, "File found", sizeof("File not found"), 0);
 			check_it(rc, __LINE__);
 			char ch;
 			//read and send file char by char
 			while((ch=fgetc(fr))!=EOF)
-				printf("%c",ch);
-				//rc = send(c, ch, 1, 0);
-				//check_it(rc, __LINE__);
+			{
+				printf("%c", ch);
+				rc = send(c, &ch, 1, 0);
+				check_it(rc, __LINE__);
+			}
 			fclose(fr);
-			rc = send(c, "End Of File", strlen("End Of File"), 0);
+			rc = send(c, &ch, 1, 0);
 			check_it(rc, __LINE__);
 		}
 
